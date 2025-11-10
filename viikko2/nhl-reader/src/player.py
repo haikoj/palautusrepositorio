@@ -8,7 +8,8 @@ class Player:
         self.assists = dict["assists"]
 
     def __str__(self):
-        return f"{self.name:20} {self.goals}+{self.assists}={self.goals+self.assists}"
+        points = self.goals+self.assists
+        return f"{self.name:20} {self.goals}+{self.assists}={points}"
 
 class PlayerReader:
     def __init__(self, url):
@@ -27,7 +28,10 @@ class PlayerStats():
         self.players = reader.get_players()
 
     def top_scorers_by_nationality(self, nationality):
-        players_by_nationality = [p for p in self.players if p.nationality == nationality]
+        players_by_nationality = []
+        for p in self.players:
+            if p.nationality == nationality:
+                players_by_nationality.append(p)
         players_by_nationality.sort(key=lambda p: p.goals+p.assists, reverse=True)
 
         return players_by_nationality

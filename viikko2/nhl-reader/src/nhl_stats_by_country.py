@@ -9,15 +9,16 @@ def main():
     players = stats.top_scorers_by_nationality("SWE")
 
     console = Console()
-    table = Table(title = "[bold italic]NHL-pelaajien tilastoja kansallisuuksittain[/]", border_style="blue")
+    table = Table(title = "NHL-pelaajien tilastoja", border_style="blue")
     table.add_column("Nimi", style="bold")
     table.add_column("Maalit", style="purple")
     table.add_column("Syötöt", style="green")
     table.add_column("Pisteet", style="bold yellow")
 
-    for player in players:
-        table.add_row(player.name, str(player.goals), str(player.assists), str(player.goals + player.assists))
-    
+    for p in players:
+        points = p.goals + p.assists
+        table.add_row(p.name, str(p.goals), str(p.assists), str(points))
+
     console.print(table)
 
 if __name__ == "__main__":
