@@ -17,7 +17,7 @@ class TennisGame:
             return self.even()
         if self.score_player1 >= 4 or self.score_player2 >= 4:
             return self.over40()
-        return self.under40 ()
+        return self.under40()
     
     def even(self):
         if self.score_player1 <= 2:
