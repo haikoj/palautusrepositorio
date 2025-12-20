@@ -359,7 +359,7 @@ class TestGameOver:
         """Test game over when AI wins"""
         with client.session_transaction() as sess:
             sess['game_type'] = 'b'
-            sess['tuomari'] = {'ekan_pisteet': 3, 'tokan_pisteet': 5, 'tasapelit': 0}
+            sess['tuomari'] = {'ekan_pisteet': 1, 'tokan_pisteet': 3, 'tasapelit': 0}
         
         response = client.get('/game_over')
         assert response.status_code == 200
@@ -369,7 +369,7 @@ class TestGameOver:
         """Test game over when advanced AI wins"""
         with client.session_transaction() as sess:
             sess['game_type'] = 'c'
-            sess['tuomari'] = {'ekan_pisteet': 4, 'tokan_pisteet': 5, 'tasapelit': 1}
+            sess['tuomari'] = {'ekan_pisteet': 2, 'tokan_pisteet': 3, 'tasapelit': 1}
         
         response = client.get('/game_over')
         assert response.status_code == 200
@@ -467,14 +467,14 @@ class TestFullGameFlow:
         # Start game
         client.post('/start', data={'game_type': 'a'})
         
-        # Play 5 rounds where player 1 always wins
-        for i in range(5):
+        # Play 3 rounds where player 1 always wins
+        for i in range(3):
             response = client.post('/move', data={'ekan_siirto': 'k', 'tokan_siirto': 's'})
         
         # Should redirect to game over
         with client.session_transaction() as sess:
             assert sess['game_over'] is True
-            assert sess['tuomari']['ekan_pisteet'] == 5
+            assert sess['tuomari']['ekan_pisteet'] == 3
         
         # Check game over page
         response = client.get('/game_over')

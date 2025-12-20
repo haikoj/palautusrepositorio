@@ -137,8 +137,8 @@ def make_move():
     
     session['round'] = session.get('round', 1) + 1
     
-    # Check if game is over (5 wins)
-    if tuomari.peli_ohi(5):
+    # Check if game is over (3 wins)
+    if tuomari.peli_ohi(3):
         session['game_over'] = True
         return redirect(url_for('game_over'))
     
@@ -155,9 +155,9 @@ def game_over():
     game_type = session.get('game_type')
     
     # Determine winner
-    if tuomari_data['ekan_pisteet'] >= 5:
+    if tuomari_data['ekan_pisteet'] >= 3:
         winner = 'Pelaaja 1 voitti pelin!'
-    elif tuomari_data['tokan_pisteet'] >= 5:
+    elif tuomari_data['tokan_pisteet'] >= 3:
         if game_type == 'a':
             winner = 'Pelaaja 2 voitti pelin!'
         else:
