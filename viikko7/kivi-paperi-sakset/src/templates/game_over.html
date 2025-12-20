@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Peli ohi - Kivi-Paperi-Sakset{% endblock %}
+
+{% block extra_style %}
+<style>
+    .winner-box {
+        background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+        color: white;
+        padding: 30px;
+        border-radius: 15px;
+        text-align: center;
+        margin: 20px 0;
+        font-size: 1.5em;
+        font-weight: bold;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+    
+    .final-scoreboard {
+        background: #f8f9fa;
+        padding: 30px;
+        border-radius: 10px;
+        margin: 20px 0;
+        text-align: center;
+    }
+    
+    .final-score {
+        font-size: 3em;
+        font-weight: bold;
+        color: #667eea;
+        margin: 15px 0;
+    }
+    
+    .trophy {
+        font-size: 4em;
+        margin: 20px 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>🏁 Peli ohi!</h1>
+
+<div class="trophy">🏆</div>
+
+<div class="winner-box">
+    {{ winner }}
+</div>
+
+<div class="final-scoreboard">
+    <h2>Lopputulos</h2>
+    <div class="final-score">{{ tuomari.ekan_pisteet }} - {{ tuomari.tokan_pisteet }}</div>
+    <div class="info" style="font-size: 1.2em; margin-top: 10px;">
+        Tasapelit: {{ tuomari.tasapelit }}
+    </div>
+</div>
+
+<form action="/" method="get">
+    <button type="submit" class="button">
+        🔄 Pelaa uudestaan
+    </button>
+</form>
+{% endblock %}

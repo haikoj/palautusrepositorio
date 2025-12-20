@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block title %}Pelaa - Kivi-Paperi-Sakset{% endblock %}
+
+{% block extra_style %}
+<style>
+    .move-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin: 20px 0;
+    }
+    
+    .move-button {
+        width: 100px;
+        height: 100px;
+        font-size: 3em;
+        padding: 0;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+    
+    .last-result {
+        background: #fff3cd;
+        border: 2px solid #ffc107;
+        padding: 20px;
+        border-radius: 10px;
+        margin: 20px 0;
+    }
+    
+    .last-result h3 {
+        color: #856404;
+        margin-bottom: 10px;
+    }
+    
+    .last-result p {
+        color: #856404;
+        margin: 5px 0;
+        font-size: 1.1em;
+    }
+    
+    .player-input {
+        margin: 20px 0;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 10px;
+    }
+    
+    .player-input h3 {
+        color: #667eea;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+    
+    .winner-alert {
+        background: #d4edda;
+        border: 2px solid #28a745;
+        color: #155724;
+        padding: 15px;
+        border-radius: 10px;
+        margin: 20px 0;
+        text-align: center;
+        font-weight: bold;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>🎮 Kivi-Paperi-Sakset</h1>
+
+<div class="game-mode">{{ game_mode }}</div>
+
+<div class="scoreboard">
+    <div class="info">Kierros: {{ round }}</div>
+    <div class="score">{{ tuomari.ekan_pisteet }} - {{ tuomari.tokan_pisteet }}</div>
+    <div class="info">Tasapelit: {{ tuomari.tasapelit }}</div>
+    {% if tuomari.ekan_pisteet >= 4 or tuomari.tokan_pisteet >= 4 %}
+    <div class="winner-alert" style="margin-top: 15px;">
+        ⚠️ Seuraava voitto ratkaisee pelin!
+    </div>
+    {% endif %}
+</div>
+
+{% if last_result %}
+<div class="last-result">
+    <h3>Edellinen kierros:</h3>
+    <p>Pelaaja 1: {{ last_result.ekan_siirto }}</p>
+    <p>Pelaaja 2: {{ last_result.tokan_siirto }}</p>
+    <p><strong>{{ last_result.result }}</strong></p>
+</div>
+{% endif %}
+
+<form action="/move" method="post" id="gameForm">
+    <div class="player-input">
+        <h3>Pelaaja 1 - Valitse siirtosi:</h3>
+        <div class="move-buttons">
+            <button type="button" class="button move-button" onclick="selectMove('ekan_siirto', 'k')" title="Kivi">
+                🪨
+            </button>
+            <button type="button" class="button move-button" onclick="selectMove('ekan_siirto', 'p')" title="Paperi">
+                📄
+            </button>
+            <button type="button" class="button move-button" onclick="selectMove('ekan_siirto', 's')" title="Sakset">
+                ✂️
+            </button>
+        </div>
+        <input type="hidden" name="ekan_siirto" id="ekan_siirto" value="">
+        <div id="ekan_valinta" class="info" style="margin-top: 10px;"></div>
+    </div>
+    
+    {% if game_type == 'a' %}
+    <div class="player-input">
+        <h3>Pelaaja 2 - Valitse siirtosi:</h3>
+        <div class="move-buttons">
+            <button type="button" class="button move-button" onclick="selectMove('tokan_siirto', 'k')" title="Kivi">
+                🪨
+            </button>
+            <button type="button" class="button move-button" onclick="selectMove('tokan_siirto', 'p')" title="Paperi">
+                📄
+            </button>
+            <button type="button" class="button move-button" onclick="selectMove('tokan_siirto', 's')" title="Sakset">
+                ✂️
+            </button>
+        </div>
+        <input type="hidden" name="tokan_siirto" id="tokan_siirto" value="">
+        <div id="tokan_valinta" class="info" style="margin-top: 10px;"></div>
+    </div>
+    {% endif %}
+    
+    <button type="submit" class="button" id="submitBtn" disabled>
+        ▶️ Pelaa kierros
+    </button>
+</form>
+
+<form action="/" method="get" style="margin-top: 20px;">
+    <button type="submit" class="button secondary">
+        🏠 Takaisin päävalikkoon
+    </button>
+</form>
+
+<script>
+    const gameType = '{{ game_type }}';
+    let ekanValittu = false;
+    let tokanValittu = false;
+    
+    function selectMove(player, move) {
+        document.getElementById(player).value = move;
+        
+        const moveNames = {
+            'k': 'Kivi 🪨',
+            'p': 'Paperi 📄',
+            's': 'Sakset ✂️'
+        };
+        
+        if (player === 'ekan_siirto') {
+            document.getElementById('ekan_valinta').textContent = 'Valittu: ' + moveNames[move];
+            ekanValittu = true;
+        } else {
+            document.getElementById('tokan_valinta').textContent = 'Valittu: ' + moveNames[move];
+            tokanValittu = true;
+        }
+        
+        // Enable submit button when appropriate
+        if (gameType === 'a') {
+            document.getElementById('submitBtn').disabled = !(ekanValittu && tokanValittu);
+        } else {
+            document.getElementById('submitBtn').disabled = !ekanValittu;
+        }
+    }
+</script>
+{% endblock %}

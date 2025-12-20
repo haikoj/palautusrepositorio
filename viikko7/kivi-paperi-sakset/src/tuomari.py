@@ -13,6 +13,9 @@ class Tuomari:
         else:
             self.tokan_pisteet = self.tokan_pisteet + 1
 
+    def peli_ohi(self, max_pisteet=5):
+        return self.ekan_pisteet >= max_pisteet or self.tokan_pisteet >= max_pisteet
+
     def __str__(self):
         return f"Pelitilanne: {self.ekan_pisteet} - {self.tokan_pisteet}\nTasapelit: {self.tasapelit}"
 

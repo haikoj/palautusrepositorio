@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Kivi-Paperi-Sakset - Valitse pelimuoto{% endblock %}
+
+{% block content %}
+<h1>🪨 📄 ✂️</h1>
+<h1>Kivi-Paperi-Sakset</h1>
+
+<h2>Valitse pelimuoto:</h2>
+
+<form action="/start" method="post">
+    <button type="submit" name="game_type" value="a" class="button">
+        👥 Pelaaja vastaan Pelaaja
+    </button>
+    
+    <button type="submit" name="game_type" value="b" class="button">
+        🤖 Pelaaja vastaan Tekoäly
+    </button>
+    
+    <button type="submit" name="game_type" value="c" class="button">
+        🧠 Pelaaja vastaan Parannettu Tekoäly
+    </button>
+</form>
+
+<div class="info" style="margin-top: 30px; text-align: center; font-size: 0.9em;">
+    <p>Peli päättyy kun jompikumpi pelaaja voittaa 5 kertaa!</p>
+    <p style="margin-top: 10px;">k = kivi, p = paperi, s = sakset</p>
+</div>
+{% endblock %}
